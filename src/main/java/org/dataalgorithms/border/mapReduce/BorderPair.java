@@ -5,6 +5,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.WritableComparable;
 
+import java.util.Objects;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -102,19 +103,10 @@ public class BorderPair implements Writable, WritableComparable<BorderPair> {
 
         BorderPair that = (BorderPair) o;
 
-        if (yearMonth != null ? !yearMonth.equals(that.yearMonth) : that.yearMonth != null)
-            return false;
-
-        if (border != null ? !border.equals(that.border) : that.border != null)
-            return false;
-
-        if (measure != null ? !measure.equals(that.measure) : that.measure != null)
-            return false;
-
-        if (value != null ? !value.equals(that.value) : that.value != null)
-            return false;
-
-        return true;
+        return Objects.equals(yearMonth, that.yearMonth)
+                && Objects.equals(border, that.border)
+                && Objects.equals(measure, that.measure)
+                && Objects.equals(value, that.value);
     }
 
     /** Sort BorderPair by the order in 'yearMonth', 'border', 'measure', then 'value'

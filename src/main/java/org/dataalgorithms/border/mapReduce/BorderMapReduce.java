@@ -46,6 +46,7 @@ public class BorderMapReduce extends Configured implements Tool {
         job.setMapperClass(BorderMapper.class);
         job.setMapOutputKeyClass(BorderPair.class);
         job.setMapOutputValueClass(IntWritable.class);
+        job.setCombinerClass(BorderCombiner.class);
         job.setReducerClass(BorderReducer.class);
         job.setPartitionerClass(BorderPartitioner.class);
         job.setGroupingComparatorClass(BorderGroupingComparator.class);
