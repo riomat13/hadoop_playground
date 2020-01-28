@@ -1,0 +1,18 @@
+# Java
+*.class
+*.jar
+META-INF/
+
+# Maven
+target/
+
+# dataset
+data/
+input/
+output/
+
+# Intellij
+out/
+.idea/
+.idea_modules/
+*.iml
