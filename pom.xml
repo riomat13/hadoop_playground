@@ -20,33 +20,22 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
                 <executions>
-                    <execution>
-                        <id>borderMapReduce</id>
-                        <configuration>
-                            <archive>
-                                <manifest>
-                                    <mainClass>org.dataalgorithms.border.mapReduce.BorderMapReduce</mainClass>
-                                </manifest>
-                            </archive>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>unpack-dependencies</id>
                         <phase>package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
                         <configuration>
                             <excludeScope>system</excludeScope>
-                            <execludes>META-INF/*.SF</execludes>
-                            <execludes>META-INF/*.MF</execludes>
-                            <execludes>META-INF/*.DSA</execludes>
-                            <execludes>META-INF/*.RSA</execludes>
-                            <execludeGroupId>junit</execludeGroupId>
+                            <excludes>META-INF/*.SF</excludes>
+                            <excludes>META-INF/*.MF</excludes>
+                            <excludes>META-INF/*.DSA</excludes>
+                            <excludes>META-INF/*.RSA</excludes>
+                            <excludeGroupIds>junit</excludeGroupIds>
                             <outputDirectory>target/classes</outputDirectory>
                         </configuration>
                     </execution>
@@ -55,10 +44,23 @@
         </plugins>
     </build>
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-client -->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
             <version>2.7.7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-core -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_2.11</artifactId>
+            <version>2.3.3</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
