@@ -28,7 +28,6 @@ public class BorderPair implements Writable, WritableComparable<BorderPair> {
     private Text measure = new Text();
     private Text border = new Text();
     private IntWritable value = new IntWritable();
-    private double average;
 
     public BorderPair() {
     }
@@ -110,26 +109,26 @@ public class BorderPair implements Writable, WritableComparable<BorderPair> {
     }
 
     /** Sort BorderPair by the order in 'yearMonth', 'border', 'measure', then 'value'
-     *  yearMonth and value in descending order, border and measure in ascending order
+     *  All items are reversed order for the process after map-reduce
      *
      * @param pair BorderPair object
      * @return int 1 if this object is smaller, -1 if larger, otherwise 0
      */
     @Override
     public int compareTo(BorderPair pair) {
-        int cmp = -1 * this.yearMonth.compareTo(pair.yearMonth);
+        int cmp = this.yearMonth.compareTo(pair.yearMonth);
         if (cmp == 0)
-            cmp = border.compareTo(pair.border);
+            cmp = -1 * border.compareTo(pair.border);
         if (cmp == 0)
-            cmp = measure.compareTo(pair.measure);
+            cmp = -1 * measure.compareTo(pair.measure);
         if (cmp == 0)
             cmp = -1 * value.compareTo(pair.value);
 
         return cmp;
     }
 
-    /** Sort by the order in 'yearMonth', 'border', 'measure'.
-     *  yearMonth is descending order, otherwise ascending order.
+    /** Compare by the order in 'yearMonth', 'border', 'measure'.
+     *  All items are reversed order for the process after map-reduce
      *
      *  This is used for grouping object for reduce step.
      *
@@ -137,11 +136,11 @@ public class BorderPair implements Writable, WritableComparable<BorderPair> {
      * @return 0 if yearMonth, border, measure are equal, 1 or -1 otherwise accordingly
      */
     protected int compareInGroup(BorderPair pair) {
-        int cmp = -1 * this.yearMonth.compareTo(pair.yearMonth);
+        int cmp = this.yearMonth.compareTo(pair.yearMonth);
         if (cmp == 0)
-            cmp = border.compareTo(pair.border);
+            cmp = -1 * border.compareTo(pair.border);
         if (cmp == 0)
-            cmp = measure.compareTo(pair.measure);
+            cmp = -1 * measure.compareTo(pair.measure);
 
         return cmp;
     }

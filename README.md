@@ -20,11 +20,15 @@ root
 
 ```
 
-## Execute code
-Example usage
-```bash
-export JAVA_HOME=/path/to/jdk
+## Setting up
+For single cluster: [link](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html)
 
-# run with maven (example with border crossing entry data)
-mvn exec:java -D exec.mainClass=org.dataalgorithms.border.mapReduce.BorderMapReduce -D exec.args="input output"
+## Execute code
+Example usage:
+```bash
+# run with maven (local, example with border crossing entry data)
+mvn exec:java -D exec.mainClass="main class" -D exec.args="some args"
+
+# run with hadoop
+hadoop jar /path/to/jar "main class" arg1 arg2 ...
 ```

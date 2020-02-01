@@ -68,6 +68,5 @@ public class BorderMapReduce extends Configured implements Tool {
 
         int exitCode = ToolRunner.run(new BorderMapReduce(), args);
         System.exit(exitCode);
-
     }
 }

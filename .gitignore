@@ -6,9 +6,13 @@ META-INF/
 # Maven
 target/
 
+# HDFS
+*.crc
+
 # dataset
 data/
 input/
+processed/
 output/
 
 # Intellij
