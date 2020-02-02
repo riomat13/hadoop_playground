@@ -11,7 +11,7 @@ root
  |─ src
  |    |─ main
  |    |    |─ java
- |    |    |     |─org.dataalgorithms.mapReduce  # sinple map-reduce with hadoop
+ |    |    |     |─org.dataalgorithms.border.mapReduce  # simple map-reduce with hadoop
  |    |    |
  |    |    └─ resources  # store
  |    └─ test  # all tests
@@ -26,7 +26,7 @@ For single cluster: [link](https://hadoop.apache.org/docs/stable/hadoop-project-
 ## Execute code
 Example usage:
 ```bash
-# run with maven (local, example with border crossing entry data)
+# run with maven (local file system)
 mvn exec:java -D exec.mainClass="main class" -D exec.args="some args"
 
 # run with hadoop
