@@ -1,4 +1,4 @@
-package org.dataalgorithms.border.mapReduce;
+package org.dataalgorithms.border.mapreduce;
 
 import org.junit.jupiter.api.Test;
 

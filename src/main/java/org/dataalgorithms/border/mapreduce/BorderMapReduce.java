@@ -1,4 +1,4 @@
-package org.dataalgorithms.border.mapReduce;
+package org.dataalgorithms.border.mapreduce;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

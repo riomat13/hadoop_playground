@@ -1,23 +1,21 @@
-package org.dataalgorithms.border.mapReduce;
+package org.dataalgorithms.border.mapreduce;
 
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.IntWritable;
 
 import java.io.IOException;
 
-
-public class BorderCombiner extends Reducer<BorderPair, IntWritable, BorderPair, IntWritable> {
+public class BorderReducer extends Reducer<BorderPair, IntWritable, Text, IntWritable> {
 
     @Override
-    public void reduce(BorderPair key, Iterable<IntWritable> values, Context context)
+    protected void reduce(BorderPair key, Iterable<IntWritable> values, Context context)
         throws IOException, InterruptedException {
 
         int sum = 0;
         for (IntWritable value: values)
             sum += value.get();
 
-        context.write(key, new IntWritable(sum));
+        context.write(key.getKeyField(), new IntWritable(sum));
     }
 }

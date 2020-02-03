@@ -89,7 +89,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.dataalgorithms.border.mapReduce.Executor</mainClass>
+                            <mainClass>org.dataalgorithms.border.mapreduce.Executor</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
