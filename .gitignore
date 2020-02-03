@@ -5,15 +5,27 @@ META-INF/
 
 # Maven
 target/
+# python
+*.pyc
+__pycache__/
+*.egg
+
+.env/
 
 # HDFS
 *.crc
+*.dat
+metastore_db/
 
 # dataset
 data/
 input/
 processed/
 output/
+
+# logs
+*.log
+logs/
 
 # Intellij
 out/
