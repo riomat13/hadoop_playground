@@ -11,7 +11,8 @@ root
  |─ src
  |    |─ main
  |    |    |─ java
- |    |    |     |─org.dataalgorithms.border.mapReduce  # simple map-reduce with hadoop
+ |    |    |     |─org.dataalgorithms.border.mapReduce      # Border Crossing Entry
+ |    |    |     |─org.dataalgorithms.wordcount.mapreduce   # Tokenize and count words
  |    |    |
  |    |    └─ resources  # store
  |    |─ test  # all tests for java
@@ -26,13 +27,13 @@ root
 ```
 
 ## Setting up
-For single cluster: [link](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html)
+Set up with single cluster for standalone and pseudo-distribution:
+[link](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html)
 
 ## Border Crossing Entry data processing
 
 ### Directory paths
 ```bash
-
 # Hadoop MapReduce
 src/main/java/org/dataalgorithms/border
 
@@ -66,4 +67,17 @@ spark-submit \
 spark-submit \
     --master 'cluster path' \
     /path/to/spark.py \
+```
+
+## Word count
+
+Count words based on [tutorial](https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html)
+and sorted by the counts, then return top N words with counts..
+
+```bash
+# Haoop MapReduce
+src/main/java/org/dataalgorithms/wordcount
+
+# execute
+hadoop jar /path/to/jar org.dataalgorithms.wordcount.mapreduce.WordCounter <input> <output> [-n 10]
 ```

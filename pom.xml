@@ -89,7 +89,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.dataalgorithms.border.mapreduce.Executor</mainClass>
+                            <mainClass>org.dataalgorithms.wordcount.mapreduce.WordCounter</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -173,6 +173,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.6.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.junit.vintage/junit-vintage-engine -->
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
             <version>5.6.0</version>
             <scope>test</scope>
         </dependency>
