@@ -52,7 +52,7 @@ public class WordCounter extends Configured implements Tool {
                 } else {
                     try {
                         runArgs[idx++] = args[i];
-                    } catch (IndexOutOfBoundsException err) {
+                    } catch (ArrayIndexOutOfBoundsException err) {
                         // raise if unregistered arguments are given
                         throw new IllegalArgumentException("Usage: wordcount <in> <out> [-skip skipPatternFile] [-n top n tokens (default: 10)]");
                     }
