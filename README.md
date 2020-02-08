@@ -6,12 +6,14 @@ This is for practicing developing hadoop and spark data algorithms project.
 
 ```$xslt
 root
+ |─ etc
+ |    |─ hadoop     # files used for configurations for hadoop. copy them to $HADOOP_HOME/etc/hadoop/
  |─ input   # store input data
  |─ output  # output data will come here
  |─ src
  |    |─ main
  |    |    |─ java
- |    |    |     |─org.dataalgorithms.border.mapReduce      # Border Crossing Entry
+ |    |    |     |─org.dataalgorithms.border.mapreduce      # Border Crossing Entry
  |    |    |     |─org.dataalgorithms.wordcount.mapreduce   # Tokenize and count words
  |    |    |
  |    |    └─ resources  # store
@@ -21,7 +23,7 @@ root
  |               |─ settings
  |               |─ border  # border crossing entry with pyspark
  |
- |─ pom.xml    # project information
+ |─ pom.xml    # project build settings
  └─ README.md  # this file
 
 ```
@@ -29,6 +31,21 @@ root
 ## Setting up
 Set up with single cluster for standalone and pseudo-distribution:
 [link](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html)
+
+### Set up data in hdfs
+```bash
+## run hadoop cluster
+$ hadoop namenode -format
+$ hadoop --daemon start namenode
+$ hadoop --daemon start datanode
+$ yarn --daemon start resourcemanager
+$ yarn --daemon start nodemanager
+
+# send data to hdfs
+# (change the path in hdfs accordingly)
+$ hadoop fs -mkdir -p /user/hdfs/input
+$ hadoop fs -put /path/to/dataset input
+```
 
 ## Border Crossing Entry data processing
 
