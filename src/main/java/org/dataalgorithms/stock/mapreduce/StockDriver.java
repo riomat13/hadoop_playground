@@ -27,12 +27,27 @@ public class StockDriver extends Configured implements Tool {
        Job job = Job.getInstance(conf);
        job.setJarByClass(getClass());
 
+        if (args.length == 4) {
+            int idx = 0;
+            String[] tmpArgs = new String[2];
+            for (int i = 0; i < 4; i++) {
+                if (args[i].equals("-n")) {
+                    job.getConfiguration().setInt("stock.window.size", Integer.parseInt(args[++i]));
+                }
+                else
+                    tmpArgs[idx++] = args[i];
+            }
+            args = tmpArgs;
+        }
+
        job.setMapperClass(StockMapper.class);
        job.setMapOutputKeyClass(CompositeKey.class);
        job.setMapOutputValueClass(StockData.class);
        job.setReducerClass(StockReducer.class);
        job.setOutputKeyClass(Text.class);
        job.setOutputValueClass(StockData.class);
+       job.setPartitionerClass(StockPartitioner.class);
+       job.setGroupingComparatorClass(CodeKeyComparator.class);
 
        LazyOutputFormat.setOutputFormatClass(job, TextOutputFormat.class);
        FileInputFormat.addInputPath(job, new Path(args[0]));
@@ -42,8 +57,8 @@ public class StockDriver extends Configured implements Tool {
     }
 
     public static void main(String[] args) throws Exception {
-        if (args.length != 2)
-            throw new IllegalArgumentException("Usage stock <input> <output>");
+        if (args.length != 2 && args.length != 4)
+            throw new IllegalArgumentException("Usage stock <input> <output> [-n <window size>]");
 
         int status = ToolRunner.run(new StockDriver(), args);
         System.exit(status);

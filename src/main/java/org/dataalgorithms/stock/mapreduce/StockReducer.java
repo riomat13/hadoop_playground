@@ -4,18 +4,17 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
 import org.apache.hadoop.io.Text;
 
-import java.util.logging.Logger;
 import java.io.IOException;
 
 public class StockReducer extends Reducer<CompositeKey, StockData, Text, StockData> {
 
-    private final Logger log = Logger.getLogger(getClass().getName());
-
     private final Text outputKey = new Text();
     private int windowSize = 5;
+    private MultipleOutputs<Text, StockData> mos;
 
-    public void setUp(Context context) {
-        windowSize = context.getConfiguration().getInt("windowSize", 5);
+    public void setup(Context context) {
+        windowSize = context.getConfiguration().getInt("stock.window.size", 5);
+        mos = new MultipleOutputs<>(context);
     }
 
     @Override
@@ -32,9 +31,12 @@ public class StockReducer extends Reducer<CompositeKey, StockData, Text, StockDa
             outputValue.setPrice(movingAverage.getAverage());
             outputValue.setTimestamp(data.getTimestamp());
 
-            // TODO: replace with MultipleOutputs
-            context.write(outputKey, outputValue);
+            mos.write(outputKey, outputValue, key.getCode());
         }
     }
 
+    @Override
+    public void cleanup(Context context) throws IOException, InterruptedException {
+        mos.close();
+    }
 }

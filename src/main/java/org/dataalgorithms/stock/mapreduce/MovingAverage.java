@@ -1,10 +1,9 @@
 package org.dataalgorithms.stock.mapreduce;
 
-import java.util.logging.Logger;
 
 public class MovingAverage {
 
-    private final Logger logger = Logger.getLogger(getClass().getName());
+    private int count;
     private final int size;
     private int index = 0;
     private double sum = 0.0;
@@ -18,6 +17,10 @@ public class MovingAverage {
     }
 
     public void addData(double value) {
+        if (count < size)
+            count++;
+
+        // calculate sum in window by circular array
         sum -= values[index];
         sum += value;
         values[index++] = value;
@@ -28,6 +31,8 @@ public class MovingAverage {
     }
 
     public double getAverage() {
-        return sum / size;
+        if (count == 0)
+            throw new IllegalArgumentException("No data is given. Can't calculate average");
+        return sum / count;
     }
 }

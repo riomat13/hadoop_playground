@@ -93,8 +93,6 @@ Data link: [Huge stock market dataset (kaggle)](https://www.kaggle.com/borismarj
 
 ### Purpose
 Calculate moving average of stock market price.
-```bash
-```
 
 Input data structure:
 ```bash
@@ -124,7 +122,7 @@ Each code represents company code and calculate moving average by close price.
 src/main/java/org/dataalgorithms/stock
 
 # execute
-hadoop jar /path/to/jar org.dataalgorithms.stock.mapreduce.StockDriver <input> <output>
+hadoop jar /path/to/jar org.dataalgorithms.stock.mapreduce.StockDriver <input> <output> [-n <window size>]
 ```
 
 ## Word count
