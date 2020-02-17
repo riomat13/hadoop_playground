@@ -14,6 +14,7 @@ root
  |    |─ main
  |    |    |─ java
  |    |    |     |─org.dataalgorithms.border.mapreduce      # Border Crossing Entry
+ |    |    |     |─org.dataalgorithms.stock.mapreduce       # Stock moving average
  |    |    |     |─org.dataalgorithms.wordcount.mapreduce   # Tokenize and count words
  |    |    |
  |    |    └─ resources  # store
@@ -84,6 +85,46 @@ spark-submit \
 spark-submit \
     --master 'cluster path' \
     /path/to/spark.py \
+```
+
+## Huge stock market dataset
+
+Data link: [Huge stock market dataset (kaggle)](https://www.kaggle.com/borismarjanovic/price-volume-data-for-all-us-stocks-etfs)
+
+### Purpose
+Calculate moving average of stock market price.
+```bash
+```
+
+Input data structure:
+```bash
+$ head -n 5 aadr.us.txt
+Date,Open,High,Low,Close,Volume,OpenInt
+2010-07-21,24.333,24.333,23.946,23.946,43321,0
+2010-07-22,24.644,24.644,24.362,24.487,18031,0
+2010-07-23,24.759,24.759,24.314,24.507,8897,0
+2010-07-26,24.624,24.624,24.449,24.595,19443,0
+```
+
+Target data structure:
+```
+Code    Date MovingAverage
+
+# Parameters
+#   Code: company code extracted from input file name
+#   Date: Latest date in the windows of moving average
+#       e.g. range of window is 2010-01-01 - 2010-01-05 => Date: 2010-01-05
+#   MovingAverage: double value of average
+```
+Each code represents company code and calculate moving average by close price.
+(Currently window size is set to 5)
+
+```bash
+# Hadoop MapReduce
+src/main/java/org/dataalgorithms/stock
+
+# execute
+hadoop jar /path/to/jar org.dataalgorithms.stock.mapreduce.StockDriver <input> <output>
 ```
 
 ## Word count
