@@ -23,6 +23,7 @@ root
  |         |─ main
  |               |─ settings
  |               |─ border  # border crossing entry with pyspark
+ |               |─ stock   # Stock moving average with pyspark
  |
  |─ pom.xml    # project build settings
  └─ README.md  # this file
@@ -56,7 +57,7 @@ $ hadoop fs -put /path/to/dataset input
 src/main/java/org/dataalgorithms/border
 
 # Spark (pyspark)
-src/python/border
+src/python/main/border
 ```
 
 Data link: [Border Crossing Entry Data](https://data.transportation.gov/Research-and-Statistics/Border-Crossing-Entry-Data/keg4-3bc2)
@@ -84,7 +85,7 @@ spark-submit \
 # if run on cluster
 spark-submit \
     --master 'cluster path' \
-    /path/to/spark.py \
+    /path/to/dir/main/border/spark.py \
 ```
 
 ## Huge stock market dataset
@@ -106,7 +107,7 @@ Date,Open,High,Low,Close,Volume,OpenInt
 
 Target data structure:
 ```
-Code    Date MovingAverage
+Code    Date    MovingAverage
 
 # Parameters
 #   Code: company code extracted from input file name
@@ -117,12 +118,25 @@ Code    Date MovingAverage
 Each code represents company code and calculate moving average by close price.
 (Currently window size is set to 5)
 
+### Directory paths
 ```bash
 # Hadoop MapReduce
 src/main/java/org/dataalgorithms/stock
 
+# Spark (pyspark)
+src/python/main/stock
+```
+
+### Execute code
+```bash
 # execute
+# hadoop
 hadoop jar /path/to/jar org.dataalgorithms.stock.mapreduce.StockDriver <input> <output> [-n <window size>]
+
+# pyspark
+spark-submit \
+    --master local[*] \
+    /path/to/dir/main/stock/app.py -i <input> -o <output> [-n <window size>]
 ```
 
 ## Word count
