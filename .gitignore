@@ -5,12 +5,15 @@ META-INF/
 
 # Maven
 target/
+
 # python
 *.pyc
 __pycache__/
 *.egg
 
 .env/
+
+.coverage
 
 # HDFS
 *.crc
