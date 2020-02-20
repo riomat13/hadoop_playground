@@ -10,6 +10,10 @@ target/
 *.pyc
 __pycache__/
 *.egg
+*.egg-info/
+dist/
+build/
+*.whl
 
 .env/
 

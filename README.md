@@ -21,9 +21,12 @@ root
  |    |─ test  # all tests for java
  |    └─ python
  |         |─ main
- |               |─ settings
- |               |─ border  # border crossing entry with pyspark
- |               |─ stock   # Stock moving average with pyspark
+ |         |     |─ settings
+ |         |     |─ border  # border crossing entry with Hadoop streaming and pyspark
+ |         |     |─ stock   # Stock moving average with pyspark
+ |         |     |─ base    # helper classes for MapReduce
+ |         |
+ |         |─ setup.py
  |
  |─ pom.xml    # project build settings
  └─ README.md  # this file
@@ -56,7 +59,7 @@ $ hadoop fs -put /path/to/dataset input
 # Hadoop MapReduce
 src/main/java/org/dataalgorithms/border
 
-# Spark (pyspark)
+# python scripts (Hadoop streaming and PySpark)
 src/python/main/border
 ```
 
@@ -65,6 +68,7 @@ Data link: [Border Crossing Entry Data](https://data.transportation.gov/Research
 Target output is the same as [link](https://github.com/riomat13/border_crossing_analysis)
 
 ### Execute code
+#### MapReduce with Hadoop
 ```bash
 # Copy data into hdfs
 hdfs dfs -put /path/to/data/* input
@@ -76,7 +80,23 @@ hadoop jar /path/to/jar org.dataalgorithms.border.mapReduce.Executor input outpu
 # run mapreduce to get top N data from processed data (report.csv)
 # (argument -n is optional, default value is 10)
 hadoop jar /path/to/jar org.dataalgorithms.border.mapReduce.TopNExtractor -i output/report.csv -o output/topN -n 10
+```
 
+#### Hadoop Streaming
+```bash
+# run mapreduce by hadoop streaming
+# (note: currently run only grouping and sorting by ascending (old -> new)
+#        for later use of aggregating and calculating average)
+hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming*.jar
+    -input <input>
+    -output <output>
+    -mapper /path/to/main/border/mapper.py
+    -reducer /path/to/main/border/reducer.py
+    -file /path/to/`wheel-file-name`.whl
+```
+
+#### Spark (PySpark)
+```bash
 # run with spark on local machine (pyspark)
 spark-submit \
     --master local[*] \
