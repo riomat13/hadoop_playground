@@ -43,6 +43,10 @@ public class DateConverter {
         }
     }
 
+    public DateConverter(String pattern) {
+        formatter = new SimpleDateFormat(pattern);
+    }
+
     public DateConverter(DateFormat formatter) {
         this.formatter = formatter;
     }
