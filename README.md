@@ -14,6 +14,7 @@ root
  |    |─ main
  |    |    |─ java
  |    |    |     |─org.dataalgorithms.border.mapreduce      # Border Crossing Entry
+ |    |    |     |─org.dataalgorithms.netflix               # Process data from Netflix Prize Data
  |    |    |     |─org.dataalgorithms.stock.mapreduce       # Stock moving average
  |    |    |     |─org.dataalgorithms.wordcount.mapreduce   # Tokenize and count words
  |    |    |
@@ -108,6 +109,41 @@ spark-submit \
     /path/to/dir/main/border/spark.py \
 ```
 
+## Netflix Prize Data
+
+Data link: [Netflix Prize Data (kaggle)](https://www.kaggle.com/netflix-inc/netflix-prize-data)
+
+### Purpose
+Process data with grouping by user for use of other project.
+
+##### Input data structure:
+
+Check the link above
+
+File name: `combined_data_[1-4].txt`
+
+##### Target data structure:
+
+File name: `{user_id:08d}-r-00000`
+
+```bash
+# for each file contains data with following format:
+MovieId,Rating,Date(yyyy-mm-dd)
+```
+
+### Directory paths
+```bash
+# Hadoop MapReduce
+src/main/java/org/dataalgorithms/netflix
+```
+
+### Execute code
+```bash
+# execute
+# hadoop
+hadoop jar /path/to/jar org.dataalgorithms.netflix.UserGroupingDriver <input> <output>
+```
+
 ## Huge stock market dataset
 
 Data link: [Huge stock market dataset (kaggle)](https://www.kaggle.com/borismarjanovic/price-volume-data-for-all-us-stocks-etfs)
@@ -115,7 +151,7 @@ Data link: [Huge stock market dataset (kaggle)](https://www.kaggle.com/borismarj
 ### Purpose
 Calculate moving average of stock market price.
 
-Input data structure:
+##### Input data structure:
 ```bash
 $ head -n 5 aadr.us.txt
 Date,Open,High,Low,Close,Volume,OpenInt
@@ -125,7 +161,7 @@ Date,Open,High,Low,Close,Volume,OpenInt
 2010-07-26,24.624,24.624,24.449,24.595,19443,0
 ```
 
-Target data structure:
+##### Target data structure:
 ```
 Code    Date    MovingAverage
 
