@@ -127,8 +127,12 @@ File name: `combined_data_[1-4].txt`
 File name: `{user_id:08d}-r-00000`
 
 ```bash
+## Group by User
 # for each file contains data with following format:
 MovieId,Rating,Date(yyyy-mm-dd)
+
+## Group by Movie (1 file)
+MovieId userId1,userId2,...
 ```
 
 ### Directory paths
@@ -141,7 +145,11 @@ src/main/java/org/dataalgorithms/netflix
 ```bash
 # execute
 # hadoop
+# for grouping by user
 hadoop jar /path/to/jar org.dataalgorithms.netflix.UserGroupingDriver <input> <output>
+
+# for grouping by movie
+hadoop jar /path/to/jar org.dataalgorithms.netflix.MovieGroupingDriver <input> <output>
 ```
 
 ## Huge stock market dataset
