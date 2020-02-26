@@ -8,3 +8,5 @@ class Config(object):
     if ROOT_DIR is None:
         from pathlib import Path
         ROOT_DIR = Path(__file__).parents[4]
+
+    HDFS_URI = os.environ.get('HDFS_URI', 'hdfs://localhost:9000')
