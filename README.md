@@ -38,6 +38,17 @@ root
 Set up with single cluster for standalone and pseudo-distribution:
 [link](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html)
 
+### Versions
+```
+# Java (Maven)
+hadoop 2.7.7
+spark 2.4.5
+
+# python
+python 3.7
+pyspark 2.4.5
+```
+
 ### Set up data in hdfs
 ```bash
 ## run hadoop cluster

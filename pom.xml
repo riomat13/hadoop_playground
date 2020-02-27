@@ -118,8 +118,8 @@
         <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-core -->
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_2.11</artifactId>
-            <version>2.3.3</version>
+            <artifactId>spark-core_2.12</artifactId>
+            <version>2.4.5</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
