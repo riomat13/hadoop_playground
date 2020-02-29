@@ -11,4 +11,9 @@ class Config(object):
         from pathlib import Path
         ROOT_DIR = Path(__file__).parents[4]
 
+    HDFS_USERNAME = os.environ.get('HDFS_USERNAME', 'hdfs')
     HDFS_URI = os.environ.get('HDFS_URI', get_hdfs_uri_from_config())
+
+    @staticmethod
+    def get_hdfs_basepath():
+        return os.path.join(Config.HDFS_URI, 'user', Config.HDFS_USERNAME)

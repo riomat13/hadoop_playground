@@ -24,6 +24,7 @@ root
  |         |─ main
  |         |     |─ settings
  |         |     |─ border  # border crossing entry with Hadoop streaming and pyspark
+ |         |     |─ netflix # calculate content similarity
  |         |     |─ stock   # Stock moving average with pyspark
  |         |     |─ base    # helper classes for MapReduce
  |         |
@@ -124,43 +125,15 @@ spark-submit \
 
 Data link: [Netflix Prize Data (kaggle)](https://www.kaggle.com/netflix-inc/netflix-prize-data)
 
-### Purpose
-Process data with grouping by user for use of other project.
+Detail link: [doc](./docs/netflix.md)
 
-##### Input data structure:
-
-Check the link above
-
-File name: `combined_data_[1-4].txt`
-
-##### Target data structure:
-
-File name: `{user_id:08d}-r-00000`
-
-```bash
-## Group by User
-# for each file contains data with following format:
-MovieId,Rating,Date(yyyy-mm-dd)
-
-## Group by Movie (1 file)
-MovieId userId1,userId2,...
-```
-
-### Directory paths
+### Directory path
 ```bash
 # Hadoop MapReduce
 src/main/java/org/dataalgorithms/netflix
-```
 
-### Execute code
-```bash
-# execute
-# hadoop
-# for grouping by user
-hadoop jar /path/to/jar org.dataalgorithms.netflix.UserGroupingDriver <input> <output>
-
-# for grouping by movie
-hadoop jar /path/to/jar org.dataalgorithms.netflix.MovieGroupingDriver <input> <output>
+# Spark app for data analysis
+src/python/main/netflix
 ```
 
 ## Huge stock market dataset
