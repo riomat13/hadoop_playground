@@ -7,7 +7,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <groupId>org.dataalgorithms</groupId>
+    <groupId>dataalgorithms</groupId>
     <artifactId>dataAlgorithms</artifactId>
     <version>1.0-SNAPSHOT</version>
     <build>
@@ -89,7 +89,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.dataalgorithms.wordcount.mapreduce.WordCounter</mainClass>
+                            <mainClass>dataalgorithms.wordcount.mapreduce.WordCounter</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
