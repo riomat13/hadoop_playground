@@ -5,26 +5,36 @@ Data link: [Netflix Prize Data (kaggle)](https://www.kaggle.com/netflix-inc/netf
 ### Purpose
 Calculate similarity of movies.
 
-##### Input data structure:
+#### Input data structure:
 
 Check the link above
 
 File name: `combined_data_[1-4].txt`
 
-##### Target data structure:
+#### Target data structure:
 
+##### MapReduce
 - User data: `{user_id:08d}-r-00000`
-- Movie data: `part-r-00000` (original output name from *Hadoop MapReduce*)
-
 
 ```bash
 ## Group by User
 # for each file contains data with following format:
 MovieId,Rating,Date(yyyy-mm-dd)
+```
 
+- Movie data: `part-r-00000` (original output name from *Hadoop MapReduce*)
+
+```bash
 ## Group by Movie (1 file)
 MovieId userId1,userId2,...
 ```
+
+##### Similarity Scores
+Output format:
+```bash
+('{movie_id1},{movie_id2}', 'Cosine={cosine_similarity},Jaccard-bin={jaccard_score_bin},Jaccard={jaccard_score}')
+```
+
 
 ### Directory paths
 ```bash
@@ -58,12 +68,26 @@ spark-submit
     [--gzip]         # compress data
 ```
 
-### Similarities
+### Similarity Score
 #### Cosine Similarity
-For now, to make simplify, use following formula to calculate *Cosine Similarity*:
+Calculate *cosine similarity* based on following formula:
 
-$$(Cosine\ Similarity) =
-\dfrac{\sum(mean(ratings_i)\cdot mean(num\_of\_raters_i))}
-      {\sqrt{\sum(mean(ratings_i)^2 + mean(num\_of\_raters_i)^2)}}$$
+$$CosineSimilarity_{i, j} =
+\dfrac{\sum_{n\in{Users}}(rating_{i,n}\cdot rating_{j,n})}
+      {\sqrt{\sum_{n\in{Users}}((rating_{i,n})^2 + (rating_{j,n})^2)}},
+      \ where\ i, j\in Movies,\ i < j$$
 
-(TODO: change to use rates by each user instead of average of the rates)
+#### Jaccard Index
+Calculate *Jaccard index* by binary values (rated or not), and by ratings.
+
+Followings are the formulars for them:
+
+$$JaccardIndex_{bin\ i, j} = 
+\dfrac{\sum_{n\in{Users}}(rating_{i,n} > 0)\ \&\ (rating_{j,n} > 0)}
+      {\sum_{n\in{Users}}(rating_{i,n} > 0)\ \|\ (rating_{j,n} > 0)}$$
+
+$$JaccardIndex_{i, j} = 
+\dfrac{\sum_{n\in{Users}}(rating_{i,n} == rating_{j,n})}
+      {\sum_{n\in{Users}}(rating_{i,n} > 0)\ \|\ (rating_{j,n} > 0)}$$
+
+$$(i, j\in Movies,\ i < j)$$

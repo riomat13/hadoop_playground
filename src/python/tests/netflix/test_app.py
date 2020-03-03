@@ -10,13 +10,17 @@ from datetime import datetime
 from decimal import Decimal
 from itertools import combinations
 
+from scipy import sparse
+
 from pyspark import SparkContext, SparkConf
+from pyspark.ml.linalg import SparseVector
 
 from main.netflix.app import (
     flatten_user_data,
+    flatten_movie_data,
     count_value_items,
     add_num_rates_to_user_data,
-    build_movie_pairs,
+    build_item_pairs_by_key,
     calc_pair_parameters,
     calc_similarity,
 )
@@ -60,6 +64,40 @@ class TestProcessData(unittest.TestCase):
             # output should be [movie_id, rating, timestamp]
             self.assertEqual(len(data), 3)
             self.assertTrue(all([isinstance(ele, int) for ele in data]))
+
+    def test_flatten_movie_data(self):
+        """Stage 2:
+        Check if string row is converted into int pairs of
+        movie_id and user_id."""
+        row1 = [100, [11, 12, 13]]
+        row2 = [101, [12, 13]]
+
+        inputs = [
+            '{}\t{}'.format(row1[0], ','.join(map(str, row1[1]))),
+            '{}\t{}'.format(row2[0], ','.join(map(str, row2[1]))),
+        ]
+
+        # target format is: [(movie_id, user_id), ...]
+        targets = [(row1[0], (val, len(row1[1]))) for val in row1[1]] \
+            + [(row2[0], (val, len(row2[1]))) for val in row2[1]]
+
+        data = sc.parallelize(inputs)
+        result = flatten_movie_data(data).collect()
+
+        self.assertEqual(len(result), len(targets))
+        targets = set(targets)
+        for element in result:
+            self.assertEqual(len(element), 2)
+            self.assertEqual(len(element[1]), 2)
+            self.assertTrue(isinstance(element[0], int))
+            self.assertTrue(isinstance(element[1][0], int))
+            self.assertTrue(isinstance(element[1][1], int))
+            if element not in targets:
+                self.fail('Not expected component is found')
+            targets.remove(element)
+
+        # check if all elements expected are consumed
+        self.assertEqual(len(targets), 0)
 
     def test_count_value_items(self):
         """Stage 3:
@@ -117,26 +155,21 @@ class TestProcessData(unittest.TestCase):
             self.assertEqual(res[0], target[i][0])
             self.assertTrue(all(r == t for r, t in zip(res[1], target[i][1])))
 
-    def test_build_movie_pairs(self):
+    def test_build_item_pairs_with_sparse_vector(self):
         """Test all combination of movies for each user."""
-        timestamp = int(datetime(2000, 10, 1).timestamp()) // 3600
-
         items = [
-            (10,1,10000),
-            (20,2,20000),
-            (30,1,30000),
-            (40,4,40000),
+            (100, SparseVector(5, {1:1, 2:1, 3:3})),
+            (101, SparseVector(5, {1:1, 2:1, 3:3})),
+            (102, SparseVector(5, {1:1, 2:5})),
+            (103, SparseVector(5, {3:2, 4:3})),
         ]
 
-        pairs = combinations(items, 2)
+        data = sc.parallelize(items)
 
-        data = sc.parallelize([
-            (100, item) for item in items
-        ])
+        target = list(combinations(items, 2))
+        target = [((i1[0], i2[0]), (i1[1], i2[1])) for i1, i2 in target]
 
-        target = [(100, pair) for pair in pairs]
-
-        result = build_movie_pairs(data).collect()
+        result = build_item_pairs_by_key(data).collect()
 
         self.assertEqual(len(result), len(target))
 
@@ -192,26 +225,26 @@ class TestProcessData(unittest.TestCase):
             self.assertTrue(all(r == t for r, t in zip(res[0], target[0])))
             self.assertTrue(all(r == t for r, t in zip(res[1], target[1])))
 
-    def test_calculate_similarities(self):
+    def test_calculate_cosine_similarities(self):
         """Test calculating similarity and return values are valid."""
-        data = [
-            [10, [0.2, 0.3, 0.1, 0.5]],
-            [20, [0.2, 0.3, 0.1, 0.5]],
-            [20, [0.2, 0.3, 0.1, 0.5]],
+        inputs = [
+                ((10, 11), (SparseVector(5, {1: 2, 2: 3, 4: 2}), SparseVector(5, {2: 2, 4: 3}))),
+                ((10, 12), (SparseVector(5, {1: 2, 2: 3, 4: 2}), SparseVector(5, {1: 5, 2: 3}))),
         ]
 
-        data = [[k, list(map(Decimal, v))] for k, v in data]
-
-        data = sc.parallelize(data)
-
+        data = sc.parallelize(inputs)
 
         result = calc_similarity(data).collect()
 
-        # TODO: add Pearson and Jaccard
-        self.assertEqual(len(result[0][1]), 1)
-        self.assertTrue(all(isinstance(r, Decimal) for r in result[0][1]))
-        self.assertTrue(all(r > 0.0 for r in result[0][1]))
+        self.assertEqual(len(result), len(inputs))
+        # key is pair of ids
+        self.assertEqual(len(result[0]), 2)
+        # value contains cosine, 2 jaccard similarities
+        self.assertEqual(len(result[0][1]), 3)
 
+        # TODO: add Pearson
+        self.assertTrue(all(isinstance(score, Decimal) for score in result[0][1]))
+        self.assertTrue(all(score >= 0.0 for score in result[0][1]))
 
 
 if __name__ == '__main__':
