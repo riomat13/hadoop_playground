@@ -335,7 +335,6 @@ def main(sc: SparkContext,
         schema = StructType([
             StructField('Movie1', LongType(), False),
             StructField('Movie2', LongType(), False),
-            StructField('Cosine-mean', FloatType(), True),
             StructField('Cosine', FloatType(), True),
             #StructField('Pearson', FloatType(), True),
             StructField('Jaccard-bin', FloatType(), True),
@@ -384,27 +383,10 @@ def main(sc: SparkContext,
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-            description='',
-            formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-i', '--input', type=str,
-                        required=True,
-                        help='Input directory path containing dataset')
-    parser.add_argument('-o', '--output', type=str,
-                        required=True,
-                        help='Output directory path')
+    from main.utils.parser import get_parser
 
-    parser.add_argument('--parquet', action='store_true',
-                        help='Set this to save as Parquet file')
-    parser.add_argument('--from-local', action='store_true',
-                        help='Set this to read data in local file system')
-    parser.add_argument('--to-hdfs', action='store_true',
-                        help='Set this to save data in hdfs')
-    parser.add_argument('--sequenceFile', action='store_true',
-                        help='Set this to save as SequenceFile\n'
-                             'This works only when to_hdfs is set')
-    parser.add_argument('--gzip', action='store_true',
-                        help='Set this to compress data by gzip')
+    # set parameters
+    parser = get_parser()
     args = parser.parse_args()
 
     input_path = args.input
@@ -420,7 +402,6 @@ if __name__ == '__main__':
         .setMaster('local[*]')
 
     sc = SparkContext(conf=conf)
-    sc.setLogLevel('WARN')
 
     main(sc,
          input_path,
