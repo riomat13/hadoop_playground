@@ -14,6 +14,7 @@ root
  |    |─ main
  |    |    |─ java
  |    |    |     |─org.dataalgorithms.border.mapreduce      # Border Crossing Entry
+ |    |    |     |─org.dataalgorithms.mag                   # Open Academic Graph
  |    |    |     |─org.dataalgorithms.netflix               # Process data from Netflix Prize Data
  |    |    |     |─org.dataalgorithms.stock.mapreduce       # Stock moving average
  |    |    |     |─org.dataalgorithms.wordcount.mapreduce   # Tokenize and count words
@@ -199,3 +200,10 @@ src/main/java/org/dataalgorithms/wordcount
 # execute
 hadoop jar /path/to/jar org.dataalgorithms.wordcount.mapreduce.WordCounter <input> <output> [-n 10]
 ```
+
+## Open Academic Graph
+
+Process data from [Open Academic Graph](https://www.openacademic.ai/oag/).
+To get full data, used OAV v1.
+
+This is used for data analysis practice.
